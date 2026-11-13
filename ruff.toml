@@ -1,0 +1,36 @@
+line-length = 100
+
+[lint]
+extend-select = [
+  # flake8-builtins
+  "A",
+  # flake8-unused-arguments
+  "ARG",
+  # flake8-bugbear
+  "B",
+  # flake8-comprehensions
+  "C4",
+  # pep8-naming
+  "N",
+  # perflint
+  "PERF",
+  # flake8-pie
+  "PIE",
+  # flake8-use-pathlib
+  "PTH",
+  # All Ruff specific rules
+  "RUF",
+  # flake8-simplify
+  "SIM",
+  # pyupgrade
+  "UP",
+]
+
+[lint.pep8-naming]
+# BaseHTTPRequestHandler API requires do_GET / do_POST.
+ignore-names = ["do_*"]
+
+[lint.flake8-builtins]
+# BaseHTTPRequestHandler.log_message names its first parameter `format`
+# (matching the stdlib signature keeps the override LSP-compatible for ty).
+builtins-ignorelist = ["format"]

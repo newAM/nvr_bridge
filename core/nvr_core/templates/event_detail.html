@@ -1,0 +1,56 @@
+{% extends "base.html" %} {% block title %}Event #{{ event.id }} · nvr_bridge{%
+endblock %} {% block content %}
+<h1>Event #{{ event.id }}</h1>
+<p>
+  <time datetime="{{ to_isoformat(event.received_at) }}"
+    >{{ format_received_at(event.received_at) }}</time
+  >
+  · <span class="kind kind-{{ event.kind }}">{{ event.kind }}</span>
+  {% if event.device_name %} · {{ event.device_name }}{% endif %} {% if
+  event.str_chn %} · {{ event.str_chn }}{% endif %}
+</p>
+{% if stills %}
+<h2>Stills</h2>
+<div class="images">
+  {% for name in stills %}
+  <figure>
+    <a href="{{ url_for('snaps', name=name) }}">
+      <img
+        src="{{ url_for('snaps', name=name) }}"
+        alt="still {{ loop.index }}"
+      />
+    </a>
+    <figcaption>Still {{ loop.index }}</figcaption>
+  </figure>
+  {% endfor %}
+</div>
+{% endif %}
+<h2>Payload</h2>
+<pre class="payload">{{ pretty_payload(event.payload) }}</pre>
+{% if event.object_snap or event.background_snap %}
+<div class="images">
+  {% if event.object_snap %}
+  <figure>
+    <a href="{{ url_for('snaps', name=event.object_snap) }}">
+      <img
+        src="{{ url_for('snaps', name=event.object_snap) }}"
+        alt="object image"
+      />
+    </a>
+    <figcaption>Object</figcaption>
+  </figure>
+  {% endif %} {% if event.background_snap %}
+  <figure>
+    <a href="{{ url_for('snaps', name=event.background_snap) }}">
+      <img
+        src="{{ url_for('snaps', name=event.background_snap) }}"
+        alt="background image"
+      />
+    </a>
+    <figcaption>Background</figcaption>
+  </figure>
+  {% endif %}
+</div>
+{% endif %}
+<p><a href="{{ url_for('web.events') }}">&larr; All events</a></p>
+{% endblock %}

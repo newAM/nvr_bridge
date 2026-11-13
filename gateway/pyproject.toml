@@ -1,0 +1,18 @@
+[project]
+name = "nvr_bridge_gateway"
+version = "0.1.0"
+description = "nvr_bridge gateway: accept the NVR's plain-HTTP pushes and relay them to the core over HTTPS with an API key"
+authors = [{ name = "Alex Martens", email = "alex+nvr_bridge@thinglab.org" }]
+requires-python = ">=3.14"
+license = "MIT"
+dependencies = ["flask", "gunicorn", "nvr_bridge_common", "systemd-python"]
+
+[project.urls]
+Repository = "https://github.com/newAM/nvr_bridge"
+
+[tool.setuptools]
+packages = ["nvr_gateway"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

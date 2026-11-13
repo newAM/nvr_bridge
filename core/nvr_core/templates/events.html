@@ -1,0 +1,78 @@
+{% extends "base.html" %} {% block title %}Events · nvr_bridge{% endblock %} {%
+block content %}
+<h1>Webhook events</h1>
+<nav class="day-nav" aria-label="Event days">
+  {% if prev_day %}
+  <a
+    class="day-nav-link"
+    href="{{ url_for('web.events', day=prev_day.isoformat()) }}"
+    >&larr; Previous</a
+  >
+  {% else %}
+  <span class="day-nav-link muted">&larr; Previous</span>
+  {% endif %}
+  <span class="day-nav-day">{{ day.strftime("%Y-%m-%d") }}</span>
+  {% if next_day %}
+  <a
+    class="day-nav-link"
+    href="{{ url_for('web.events', day=next_day.isoformat()) }}"
+    >Next &rarr;</a
+  >
+  {% else %}
+  <span class="day-nav-link muted">Next &rarr;</span>
+  {% endif %}
+</nav>
+{% if events %}
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Received</th>
+        <th>Kind</th>
+        <th>Channel</th>
+        <th></th>
+        <th>Images</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+      <tr>
+        <td>
+          <a href="{{ url_for('web.event_detail', event_id=event.id) }}">
+            <time datetime="{{ to_isoformat(event.received_at) }}"
+              >{{ format_received_at(event.received_at) }}</time
+            >
+          </a>
+        </td>
+        <td>
+          <span class="kind kind-{{ event.kind }}">{{ event.kind }}</span>
+        </td>
+        <td>{{ event.str_chn or "" }}</td>
+        <td>
+          {% if event.group_token %}
+          <a href="{{ url_for('web.event_group', token=event.group_token) }}"
+            >group</a
+          >
+          {% endif %}
+        </td>
+        <td>
+          <div class="thumbs">
+            {% for name in event.live_snaps_parsed %}
+            <a href="{{ url_for('snaps', name=name) }}">
+              <img
+                class="thumb"
+                src="{{ url_for('snaps', name=name) }}"
+                alt="still {{ loop.index }}"
+              />
+            </a>
+            {% endfor %}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p>No events for this day.</p>
+{% endif %} {% endblock %}

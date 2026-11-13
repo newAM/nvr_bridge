@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% block title %}Event group · nvr_bridge{% endblock
+%} {% block content %}
+<h1>Event group</h1>
+<p>
+  From
+  <time datetime="{{ to_isoformat(events[0].received_at) }}"
+    >{{ format_received_at(events[0].received_at) }}</time
+  >
+  through
+  <time datetime="{{ to_isoformat(events[-1].received_at) }}"
+    >{{ format_received_at(events[-1].received_at) }}</time
+  >
+  · {{ events | length }} event(s)
+</p>
+
+{% for event in events %}
+<section class="group-event">
+  <h2>
+    <a href="{{ url_for('web.event_detail', event_id=event.id) }}"
+      >{{ format_received_at(event.received_at) }}</a
+    >
+    · <span class="kind kind-{{ event.kind }}">{{ event.kind }}</span>
+    {% if event.str_chn %} · {{ event.str_chn }}{% endif %} {% if
+    event.device_name %} · {{ event.device_name }}{% endif %}
+  </h2>
+  {% set images = [] %} {% for name in event.live_snaps_parsed %}{% set _ =
+  images.append((name, "live · camera " ~ loop.index)) %}{% endfor %} {% if
+  event.object_snap %}{% set _ = images.append((event.object_snap, "object"))
+  %}{% endif %} {% if event.background_snap %}{% set _ =
+  images.append((event.background_snap, "background")) %}{% endif %} {% if
+  images %}
+  <div class="images">
+    {% for name, label in images %}
+    <figure>
+      <a href="{{ url_for('snaps', name=name) }}">
+        <img src="{{ url_for('snaps', name=name) }}" alt="{{ label }} image" />
+      </a>
+      <figcaption>{{ label }}</figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="muted">No images for this event.</p>
+  {% endif %}
+</section>
+{% endfor %}
+<p><a href="{{ url_for('web.events') }}">&larr; All events</a></p>
+{% endblock %}

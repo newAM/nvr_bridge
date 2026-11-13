@@ -1,0 +1,22 @@
+[project]
+name = "nvr_bridge_common"
+version = "0.1.0"
+description = "Shared code for the nvr_bridge gateway and core services"
+readme = "../README.md"
+authors = [{ name = "Alex Martens", email = "alex+nvr_bridge@thinglab.org" }]
+requires-python = ">=3.14"
+license = "MIT"
+
+[project.urls]
+Repository = "https://github.com/newAM/nvr_bridge"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["nvr_common"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

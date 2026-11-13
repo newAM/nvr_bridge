@@ -1,0 +1,36 @@
+[project]
+name = "nvr_bridge_core"
+version = "0.1.0"
+description = "nvr_bridge core: classify NVR pushes, store and serve snapshots, forward to Home Assistant"
+authors = [{ name = "Alex Martens", email = "alex+nvr_bridge@thinglab.org" }]
+requires-python = ">=3.14"
+license = "MIT"
+dependencies = [
+  "authlib",
+  "flask",
+  "flask-session",
+  "flask-sqlalchemy",
+  "flask-wtf",
+  "gunicorn",
+  "nvr_bridge_common",
+  "requests",
+  "systemd-python",
+]
+
+[project.urls]
+Repository = "https://github.com/newAM/nvr_bridge"
+
+[tool.setuptools]
+packages = ["nvr_core"]
+
+[tool.setuptools.package-data]
+nvr_core = ["templates/*.html", "static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+filterwarnings = [
+  # flask-session 0.8 still uses the deprecated datetime.utcnow(); not
+  # ours to fix -- ignore it only for that module.
+  "ignore:datetime.datetime.utcnow\\(\\) is deprecated:DeprecationWarning:flask_session.sqlalchemy.sqlalchemy",
+]
